@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android System Recovery v4.12</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00ff00;
+            font-family: monospace;
+            padding: 20px;
+            font-size: 15px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+        .error { color: #ff3333; font-weight: bold; }
+        .warn { color: #ffff00; }
+        .success { color: #33ff33; }
+        #meme { display: none; text-align: center; margin-top: 50px; }
+        img { width: 85%; max-width: 320px; border-radius: 15px; border: 3px solid #00ff00; }
+    </style>
+</head>
+<body>
+
+    <div id="console">
+        <p>> [INFO] Iniciando diagnóstico del sistema Android...</p>
+    </div>
+
+    <div id="meme">
+        <h1 style="color: white; font-size: 28px;">¡CAÍSTE EN LA TRAMPA! 🤪🕺</h1>
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWp0Z29pZ3M2ZzZtc29pYmd2b3ptY3dwYm10bXN5cmI5OHYwZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/CYU3D3bQnlLIk/giphy.gif" alt="Meme">
+        <p style="color: #ffff00; margin-top: 25px; font-size: 18px; font-weight: bold;">
+            Tranquilo montro, tu teléfono está 100% seguro. <br>¡Fue una broma! Cierra la pestaña. 😂
+        </p>
+    </div>
+
+    <script>
+        const consoleDiv = document.getElementById('console');
+        const memeDiv = document.getElementById('meme');
+        
+        const lineas = [
+            "> [OK] Conexión con el kernel establecida.",
+            "> [WARN] Accediendo a partición protegida /storage/emulated/0...",
+            "> [INFO] Extrayendo metadatos de la galería de fotos...",
+            "> Descargando archivo: DCIM/Camera/IMG_0023.jpg... 100%",
+            "> Descargando archivo: DCIM/Camera/IMG_0412.jpg... 100%",
+            "> Descargando archivo: WhatsApp/Media/WhatsApp Images/... [Compresionando 1420 fotos]",
+            "> [INFO] Buscando bases de datos cifradas...",
+            "> Encontrado: com.whatsapp/databases/msgstore.db.crypt14",
+            "> [WARN] Descifrando chats de WhatsApp (Fuerza bruta ejecutándose)...",
+            "> Progreso de descifrado: 10%... 35%... 70%... 100%",
+            "> [SUCCESS] Claves de cifrado obtenidas. Copiando chats privados...",
+            "> [INFO] Extrayendo contactos de la cuenta de Google principal...",
+            "> Conectando con servidores remotos para respaldo de datos...",
+            "> Enviando historial de navegación de Google Chrome... [COMPLETO]",
+            "> [WARN] Escaneando contraseñas guardadas en Autofill...",
+            "> Contraseña encontrada: Instagram account... [OK]",
+            "> Contraseña encontrada: Facebook login... [OK]",
+            "> Contraseña encontrada: Banco App... [OK]",
+            "> [INFO] Copiando tokens de sesión activos...",
+            "> [ERROR] ¡ALERTA DE SEGURIDAD DEL SISTEMA!",
+            "> Intento de bloqueo del sistema operativo detectado por el usuario.",
+            "> Ejecutando protocolo de autoprotección (Wipe Data)...",
+            "> Desmontando partición: /system...",
+            "> Desmontando partición: /data...",
+            "> Borrando caché del procesador...",
+            "> [ERROR] SOBRECALENTAMIENTO SIMULADO EN BATERÍA LITI-ION...",
+            "> Iniciando borrado completo de fábrica (Factory Reset)...",
+            "> Eliminando aplicaciones de usuario...",
+            "> Eliminando: Instagram.apk... [OK]",
+            "> Eliminando: TikTok.apk... [OK]",
+            "> Eliminando: WhatsApp.apk... [OK]",
+            "> Formateando almacenamiento del dispositivo... 5%",
+            "> Formateando almacenamiento del dispositivo... 22%",
+            "> Formateando almacenamiento del dispositivo... 48%",
+            "> Formateando almacenamiento del dispositivo... 79%",
+            "> Formateando almacenamiento del dispositivo... 99%",
+            "> [ERROR] SISTEMA CORROMPIDO. APAGADO INMINENTE EN 3...",
+            "> [ERROR] SISTEMA CORROMPIDO. APAGADO INMINENTE EN 2...",
+            "> [ERROR] SISTEMA CORROMPIDO. APAGADO INMINENTE EN 1..."
+        ];
+
+        let i = 0;
+
+        // Hace que el teléfono vibre si el usuario interactúa con la pantalla
+        document.body.addEventListener('click', () => {
+            if (navigator.vibrate) navigator.vibrate([150, 100, 150]);
+        });
+
+        function escribirLinea() {
+            if (i < lineas.length) {
+                let p = document.createElement('p');
+                
+                // Formatear colores según el tipo de mensaje
+                if(lineas[i].includes("[ERROR]")) p.className = "error";
+                else if(lineas[i].includes("[WARN]")) p.className = "warn";
+                else if(lineas[i].includes("[SUCCESS]")) p.className = "success";
+                
+                p.innerHTML = lineas[i];
+                consoleDiv.appendChild(p);
+                
+                // Hacer scroll automático hacia abajo para que sigan las líneas si es largo
+                window.scrollTo(0, document.body.scrollHeight);
+                
+                // Vibraciones automáticas en los momentos más tensos de la broma
+                if (navigator.vibrate) {
+                    if (lineas[i].includes("[ERROR]")) {
+                        navigator.vibrate([400, 100, 400]);
+                    } else if (lineas[i].includes("Formateando")) {
+                        navigator.vibrate(200);
+                    }
+                }
+                
+                i++;
+                
+                // Ritmo variable: unas líneas cargan más rápido que otras para dar realismo
+                let tiempo = 1100;
+                if(lineas[i-1].includes("Formateando") || lineas[i-1].includes("Progreso")) {
+                    tiempo = 1800; // Más lento en las cargas porcentuales
+                } else if (lineas[i-1].includes("Eliminando:")) {
+                    tiempo = 600;  // Más rápido borrando apps
+                }
+                
+                setTimeout(escribirLinea, tiempo);
+            } else {
+                // Final de la broma: Esconde la consola y muestra el meme épico
+                setTimeout(() => {
+                    consoleDiv.style.display = 'none';
+                    memeDiv.style.display = 'block';
+                    if (navigator.vibrate) navigator.vibrate([600, 200, 600, 200, 800]);
+                }, 1500);
+            }
+        }
+
+        // Espera 2 segundos antes de empezar a escribir para simular que carga la web
+        setTimeout(escribirLinea, 2000);
+    </script>
+</body>
+</html>
